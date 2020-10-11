@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Distributed System</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+  <link rel="stylesheet" href="statics/css/Index_Style_Css.css" />
+</head>
+<body>
+<div class="inte-header">
+  <h2>Assignment1: CVoid2019数据查询</h2>
+</div>
+<div class="container" style="margin-bottom: 80px">
+  <h2 style="margin-top: 2rem;">开发文档</h2>
+  <hr style="border: 1px solid #2e87e6; width: 35%;" />
+  <div class="row">
+    <h4 style="margin-bottom: 20px"><b>技术栈</b></h4>
+    <ul style="width: 90%; margin: auto;">
+      <li>HTML5</li>
+      <li>CSS3</li>
+      <li>JavaScript</li>
+      <li>Ajax</li>
+      <li>Java Servlet</li>
+      <li>JSP</li>
+    </ul>
+    <h4><b>框架设计</b></h4>
+
+    <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b>后端设计</b></h5>
+    <p>程序进入查询页访问:<b>127.0.0.1/zhm/Search</b> 进入查询,由一个Servlet接收该请求并查询数据库中存储的大洲名称,接着请求将转发至jsp页面</p>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/Search_Shot.png">
+    <p>用户在查询页选择大洲后，通过Ajax构造请求地址:<b>127.0.0.1/zhm/GetCountry</b> 由一个Servlet接收该请求并查询数据库中对应大洲的国家名称后,返回json格式数据给jsp页面</p>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/Country_Shot.png">
+    <p>用户在查询页选择大洲和国家后点击查询按钮,通过Ajax构造请求地址:<b>127.0.0.1/zhm/servlet/GetData</b> 由一个Servlet接收该请求并查询数据库中对应国家的数据后,返回json格式数据给jsp页面</p>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/Data_Shot.png">
+
+    <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b>数据库设计</b></h5>
+    <p>数据库名称:<b>CVoidData</b></p>
+    <p>数据表:
+    <ul>
+      <li>Continent:存储大洲信息(大洲编号,大洲名称)</li>
+      <li>Country:存储国家信息(国家编号,国家名称,所属大洲编号)</li>
+      <li>InfectInfo:疫情信息(编号,时间,总感染人数,当日新增,死亡人数)</li>
+    </ul>
+    </p>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/DataBase_Shot.png">
+
+    <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b>前端设计</b></h5>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/pageshow_shot.png">
+    <p>用户访问查询页面后Servlet请求转发至jsp页面, jsp将大洲数据写入页面</p>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/JSPWrite_Shot.png">
+    <p>通过ajax异步更新国家数据时,将原select框内容删除,并写入新的数据(json格式)</p>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/CountryChange_Shot.png">
+    <p>获取疫情数据后,写入新数据</p>
+    <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="statics/img/InfectData_Shot.png">
+
+    <h4 style="margin-bottom: 20px"><b>More discussion</b></h4>
+    <p>构造Json数据时,由于数据量小加上没找到简单易用的Json解析库,故采用手工生成json格式数据方式,若数据量大可使用Map+JsonObject(这个包我暂时没找到)方式生成</p>
+    <p>数据库设计时,将各查询语句设计为数据库函数更好</p>
+    <p>数据来源为随机生成数据,原定爬虫爬取方案因为个人技术原因失败了(主要在爬取国家数据后如何归入不同大洲时遇到问题)</p>
+    <p>Github:</p>
+  </div>
+
+  <br/><br/><br/>
+  <div class="Submitbtn" style="text-align-last: center;">
+    <a href="./users.html" class="btn btn-secondary">进入查询</a>
+  </div>
+</div>
+
+<div class="footer">18011485 钟宏鸣</div>
+</body>
