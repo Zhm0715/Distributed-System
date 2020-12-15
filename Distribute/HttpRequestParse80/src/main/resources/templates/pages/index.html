@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Distributed System</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/Index_Style_Css.css" />
+</head>
+<body>
+<div class="inte-header">
+    <h2>Assignment2: 机场信息管理系统</h2>
+</div>
+<div class="container" style="margin-bottom: 80px">
+    <h2 style="margin-top: 2rem;">开发文档</h2>
+    <hr style="border: 1px solid #583e7e;; width: 35%;" />
+    <div class="row">
+        <h4 style="margin-bottom: 20px"><b>技术栈</b></h4>
+        <ul style="width: 90%; margin: auto;">
+            <li>HTML5</li>
+            <li>CSS3</li>
+            <li>Bootstrap</li>
+            <li>JavaScript</li>
+            <li>Ajax</li>
+            <li>Maven</li>
+            <li>Spring</li>
+            <li>SpringMVC</li>
+            <li>MyBatis</li>
+        </ul>
+        <p>本系统采用SSM开发,使用Maven作为项目管理工具,三个框架均基于注解操作。</p>
+        <p>本系统为面向旅客、面向工作人员、面向值机区域与行李区域的航班信息显示系统。</p>
+        <p>管理员可以登录进行航班及行李信息的添加,旅客可以实时接收机场数据库中的航班信息及行李信息。</p>
+        <h4><b>框架设计</b></h4>
+        <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b> Overall Design</b></h5>
+        <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/framework.png">
+        <h5 style="text-align: center;">Figure 1</h5>
+        <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b>Organization</b></h5>
+        <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/package1.png">
+        <h5 style="text-align: center;">Figure 2</h5>
+        <p>本程序采用三层架构进行开发
+        <ul>
+            <li>Controller:控制层;控制url路由及请求、响应处理</li>
+            <li>Services:服务层;为Controller中的请求与相应提供相应的服务(验证数据、抽取数据等)</li>
+            <li>Dao:数据持久层;提供POJO(在domain包内定义)的数据库读写方法</li>
+        </ul>
+        </p>
+        <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b>DataBase Design</b></h5>
+        <p>数据库名称:<b>AirportManager</b></p>
+        <p>数据表:
+        <ul>
+            <li>Manager:存储管理员信息(编号,管理员帐号,管理员密码)</li>
+            <li>Flight:存储航班信息(编号,航班号,航空公司,始发地,目的地,经停,计划起飞时间,计划到达时间,实际到达时间,航站楼,登机口,值机柜台,航班状态)</li>
+            <li>Baggage:存储包裹信息(编号,航班号,航空公司,到达时间,行李分拣台)</li>
+        </ul>
+        </p>
+        <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/DataBase.png">
+        <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b>Function Design</b></h5>
+        <p>航班/包裹信息显示功能</p>
+        <ul>
+            <li>
+                通过访问对应url进入信息显示页面,该请求经SpringMVC的DispatcherServlet拦截后分发对应处理操作;
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/infoshow.png">
+            </li>
+            <li>
+                在信息展示页中定义ajax访问对应的数据获取url进行局部数据更新;
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/jsflush.png">
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/flushhtml.png">
+            </li>
+            <li>
+                SpringMVC受到ajax发出的数据获取请求后,调用对应服务的数据获取接口,并将数据回写给ajax以进行页面更新;
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/flushcontroller.png">
+            </li>
+            <li>
+                对应服务的获取数据接口被调用后,调用相应的Dao层方法并返回数据;
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/flushservice.png">
+            </li>
+            <li>
+                Dao层通过Mybatis执行相应的SQL语句并将结果集返回。<br />
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/flushdao.png">
+            </li>
+        </ul>
+        <p>登录功能</p>
+        <ul>
+            <li>
+                管理员第一次访问登录url后,经SpringMVC路由至登录页面,输入账号密码后封装为Manager的POJO使用post方法提交后台验证;验证成功则返回管理员页面,否则返回失败页面;
+            </li>
+            <li>
+                后台调用ManagerService中的isLogin方法进行验证;若登录成功,则将管理员信息写入Session;
+            </li>
+            <li>
+                后续管理员再次访问登录页面时,后台会判断Session中是否含有登录信息,若有则直接重定向至管理员界面
+            </li>
+            <li>
+                若未登录人员通过url直接访问管理员页面时,由于所携带的Session中无相关登录信息,故请求将会被拦截并重定向至访问失败页面
+            </li>
+            <li>
+                登录验证<br />
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/ManagerLogin2.png">
+            </li>
+            <li>
+                管理员验证<br />
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/ManagerLogin.png">
+            </li>
+        </ul>
+        <p>数据添加功能</p>
+        <ul>
+            <li>
+                管理员进入管理界面后,可以访问对应页面进行数据添加功能;在填写航班/包裹相应信息后,封装为对应POJO传输至后台;
+            </li>
+            <li>
+                后台得到该数据后调用相应服务接口将该数据进行保存;
+            </li>
+            <li>
+                服务接口调用相应的Dao接口将数据保存至数据库中;
+            </li>
+            <li>
+                与登录管理类似,若未经验证人员通过url访问数据添加页面,会被重定向至禁止访问页面;
+            </li>
+            <li>
+                数据添加、验证<br />
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/AddData.png">
+            </li>
+        </ul>
+        <p>缓存功能</p>
+        <ul>
+            <li>程序采用HashMap+同步的方式自实现缓存</li>
+            <li>
+                首先采用HashMap存储缓存数据, 采用ScheduledExecutorServic任务线程池的方式实现过期缓存的清除;
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/cache1.png">
+            </li>
+            <li>
+                在往HashMap中添加数据时,根据设置的过期时间定义Future并设置清除任务,兼顾HashMap并非线程安全,故每次操作均需加锁(HashMap封装一个管程);
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/cache2.png">
+            </li>
+            <li>
+                封装Entity类,以便对应清除任务与具体key-value数据进行绑定
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/cache_Future.png">
+            </li>
+            <li>
+                在Service层,每次添加数据时,将数据库写入Mysql数据库并相应更新缓存;在查询数据时,直接使用缓存中的数据;
+                <img class="img-fluid" style="width: 60% !important; margin: 30px auto;" alt="Three Tier System" src="/img/CacheService.png">
+            </li>
+        </ul>
+        <h5 style="margin-bottom: 20px"><i class="fas fa-caret-right"></i>&nbsp;<b>Video of demonstration</b></h5>
+        <video controls="controls">
+            <source src="/img/show.mp4" type="video/mp4">
+        </video>
+        <h4 style="margin-bottom: 20px"><b>More discussion</b></h4>
+        <ul>
+            <li><p>缓存部分实现过于粗糙,未考虑到更多数据类型的添加与缓存功能的可拓展性,可使用Redis对程序进行重构</p></li>
+            <li><p>登录验证部分可采用Spring自带的Interceptor或SpringSecurity进行实现,但试验Interceptor发现似乎不起作用,原因不明</p></li>
+            <li><p>对url进行路由时,大部份采用了相对路径的方式,导致某些页面上直接输入url的页面跳转会出现错误</p></li>
+            <li><p>该项目在Edge浏览器中运行良好,但在Chrome中会出现中文乱码的情况,且在配置Spring编码过滤器后问题仍未解决,原因不明</p></li>
+            <li><p>Github: <b>https://github.com/Zhm0715/Distributed-System/tree/main/HW2</b></p></li>
+        </ul>
+    </div>
+</div>
+
+<br/><br/><br/>
+<div class="Submitbtn" style="text-align-last: center;">
+    <a href="/AirportMain" class="btn btn-secondary">进入网站</a>
+</div>
+</div>
+
+<div class="footer">18011485 钟宏鸣</div>
+</body>

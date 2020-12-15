@@ -1,0 +1,19 @@
+server:
+  port: 80
+
+spring:
+  application:
+    name: HttpRequestParse
+  thymeleaf:
+    prefix: classpath:/templates/pages/
+    cache: false
+    suffix: .html
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    preferIpAddress: true
